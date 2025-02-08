@@ -24,6 +24,20 @@ def hash_password(password, salt=None):
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
+    def validated_password (self, password):
+
+        if not re.search(r"[A-Z]", password):
+            return "Password must contain at least one uppercase letter."
+        if not re.search(r"[a-z]", password):
+            return "Password must contain at least one lowercase letter."
+        if not re.search(r"[0-9]", password):
+            return "Password must contain at least one digit."
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+            return "Password must contain at least one special character."
+
+        return None
+    
+        pass
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
 
@@ -50,5 +64,14 @@ class LoginAPI(generics.GenericAPIView):
         username = data['username']
         password = data['password']
 
-        return Response({'error': 'something'}, status=status.HTTP_403_FORBIDDEN)
+        user= authenticate(username= username, password= password)
+
+        if user is not None:
+            Token, created = Token.objects.get_or_create(user=user)
+            return Response({
+                "message": "Login successful",
+                "token": token.key
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'something'}, status=status.HTTP_403_FORBIDDEN)
 
