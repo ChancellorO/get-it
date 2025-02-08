@@ -26,16 +26,14 @@ class RegisterAPI(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-
-        serializer.is_valid(raise_exception=True)
         
-        print(serializer)
-        # user = serializer.save()
+        serializer.is_valid(raise_exception=True)  # Validate data
 
-        # user.save()
+        user = serializer.save()  # This will already save the user
 
         return Response({
-            "result": "Successfully Created User" })
+            "result": "Successfully Created User"
+        })
  
 
 class LoginAPI(generics.GenericAPIView):
