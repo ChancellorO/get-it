@@ -44,16 +44,14 @@ class RegisterAPI(generics.GenericAPIView):
         pass
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        
+        serializer.is_valid(raise_exception=True)  # Validate data
 
-        serializer.is_valid(raise_exception=True)
-        print('im here')
-        print(serializer)
-        # user = serializer.save()
-
-        # user.save()
+        user = serializer.save()  # This will already save the user
 
         return Response({
-            "result": "Successfully Created User" })
+            "result": "Successfully Created User"
+        })
  
 
 class LoginAPI(generics.GenericAPIView):
