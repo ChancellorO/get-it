@@ -12,7 +12,7 @@ class RegisterSerializer(serializers.Serializer):
         print("Create Method - Validated Data:", validated_data)  # Debug print
 
         password = validated_data.pop('password', None)  # Handle password separately
-        user = Person.objects.create(**validated_data)  # Create the user object
+        user = Person.objects.create_user(**validated_data)  # Create the user object
         
         if password:
             user.set_password(password)  # Hash the password before saving
