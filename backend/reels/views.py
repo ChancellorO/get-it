@@ -1,36 +1,54 @@
 
 from django.shortcuts import render
-from urbanForest.models import reels
 from rest_framework import viewsets, status, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+import os
+import hashlib
 
-from .serializers import UserSerializer
+from .serializers import RegisterSerializer, LoginSerializer
+
+def hash_password(password, salt=None):
+    if salt == None:
+        salt = os.urandom(16)
+    # Combine the password and salt, then hash it
+    hashed_password = hashlib.sha256((password.encode() + salt)).hexdigest()
+    
+    # Concatenate the salt with the hashed password
+    salted_hash = hashed_password + ":" + salt.hex()
+    
+    return salted_hash
 
 class RegisterAPI(generics.GenericAPIView):
-    serializer_class = UserSerializer
+    serializer_class = RegisterSerializer
 
-    def post(self, request, _):
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        print('im here')
+        print(serializer)
+        # user = serializer.save()
+
+        # user.save()
+
+        return Response({
+            "result": "Successfully Created User" })
+ 
+
+class LoginAPI(generics.GenericAPIView):
+    serializer_class = LoginSerializer
+
+    def post(self, request, *args, **kwargs):
+        # Validate input data using serializer
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        user.save()
-        return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data})
+        data = serializer.validated_data
 
-class LoginAPI(ObtainAuthToken):
+        username = data['username']
+        password = data['password']
 
-    def post(self, request, _):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        if not user.is_active:
-            return Response({"error": "Account is not active"}, status=status.HTTP_403_FORBIDDEN)
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'email': user.email
-        })
+        return Response({'error': 'something'}, status=status.HTTP_403_FORBIDDEN)
+

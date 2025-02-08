@@ -22,6 +22,7 @@ from reels import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("reels/", include('reels.urls')),
+    path('register/', views.RegisterAPI.as_view(), name='register'),
+    path('login/', views.LoginAPI.as_view(), name='login'),
 
 ]
