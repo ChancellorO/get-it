@@ -44,7 +44,6 @@ export default function Login() {
     <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
             <Text style={styles.title}>Get It.</Text>
-            <Text style={styles.subtitle}>Profile</Text>
         </View>
         <Input
             placeholder='Username'
@@ -61,6 +60,8 @@ export default function Login() {
             style={{width: '90%'}}
             label='Password'
             size='large'
+            secureTextEntry
+            
         /> 
         { error ? 
             <Text style={{color: 'red'}}>{error}</Text>

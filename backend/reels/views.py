@@ -190,10 +190,9 @@ class AskGPT(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         # Load environment variables from .env file
+        load_dotenv()
 
         user_input = request.data.get('user_input')
-
-        load_dotenv()
 
         # Get API key from .env
         api_key = os.getenv("OPENAI_API_KEY")
@@ -210,7 +209,7 @@ class AskGPT(generics.GenericAPIView):
 
         def is_financial_question(question):
             """Check if the question is related to financial topics"""
-            lower_input = question.lower()
+            lower_input = question.lower()  # Ensure case-insensitive comparison
             return any(keyword in lower_input for keyword in FINANCIAL_KEYWORDS)
 
         def test_openai(question):
@@ -220,7 +219,7 @@ class AskGPT(generics.GenericAPIView):
 
             try:
                 response = client.chat.completions.create(
-                    model="gpt-3.5-turbo",  # Use "gpt-4o" if available
+                    model="gpt-3.5-turbo",  # Use "gpt-4" if available
                     messages=[{"role": "user", "content": question}]
                 )
                 return response.choices[0].message.content
@@ -228,5 +227,6 @@ class AskGPT(generics.GenericAPIView):
                 return f"Error: {e}"
 
         answer = test_openai(user_input)
-        
-        Response({"result": answer}, status=status.HTTP_200_OK)
+
+        # Return the response instead of just calling it.
+        return Response({"result": answer}, status=status.HTTP_200_OK)

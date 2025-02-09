@@ -12,6 +12,9 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs(true)
 
 const DiscussionScreen = () => {
   // Text input state for the current message
@@ -30,9 +33,12 @@ const DiscussionScreen = () => {
 
       // Add a hard-coded bot response after a delay (simulate an API call)
       try {
-        const res = await axios.post('http://127.0.0.1:8000/AskGPT/', {"user_input": userMessage});
-        console.log(res);
-        setMessages((prevMessages) => [...prevMessages, res.data.result]);
+        const res = await axios.post('http://127.0.0.1:8000/AskGPT/', {"user_input": userMessage["text"]});
+        // console.log(res);
+        // setTimeout(() => {
+          const botResponse = { id: Date.now(), sender: 'bot', text: res.data.result };
+          setMessages((prevMessages) => [...prevMessages, botResponse ]);
+      // }, 3000); // 3 seconds timeout
       }
       catch (e) {
         console.error(e);

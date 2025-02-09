@@ -252,8 +252,8 @@ export default function SignUp() {
                               </View>
                         )}
                          {step === 6 && (
-                           <View style={[styles.multiTagScrollView, {justifyContent: 'center', alignItems: 'center', width: '90%', rowGap: 10}]}>
-                             <Image source={{ uri: '../../../assets/images/image_landing.png'}} style={{width: '100%'}} />
+                           <View style={[styles.multiTagScrollView, { alignItems: 'center', width: '90%', rowGap: 10}]}>
+                             <Image source={require('../../../assets/images/image_landing.png')} style={{width: '50%', objectFit: 'contain'}} />
                              <Text style={[styles.label, {textAlign: 'center', fontSize: 28}]}>Welcome, {username}!</Text>
                              <Text style={{textAlign: 'center', fontSize: 18}}>Based on your choice, we curated contents by certified experts.</Text>
                            </View>

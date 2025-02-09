@@ -28,21 +28,29 @@ export default function Home() {
         title: ['5 Minute Stocks Terminologies', 'Understanding Market Cycles', 'How to Get the Best Mortgage Rates', 'Investment Strategies for Beginners'][index % 4],
         likes: Math.floor(Math.random() * 100),
         comments: Math.floor(Math.random() * 50),
-        image: 'https://via.placeholder.com/50',
-        videoThumbnail: `https://via.placeholder.com/300x150/808080/FFFFFF?text=Video+${index + 1}`
+        image: '../../assets/images/1.png',
+        videoThumbnail: `../../assets/images/1.png`
     }));
 
-    const renderPost = ({ item }) => (
+    const renderPost = ({ item, index }) => (
         <View style={styles.postCard}>
             <View style={styles.postHeader}>
-                <Image source={{ uri: item.image }} style={styles.profilePic} />
+                { index % 2 == 0 ?
+                <Image source={require('../../assets/images/1.png')} style={styles.profilePic} />
+                :
+                <Image source={require('../../assets/images/3.png')} style={styles.profilePic} />
+                }   
                 <View>
                     <Text style={styles.postName}>{item.name} <Text style={styles.categoryTag}>{item.category}</Text></Text>
                     <Text style={styles.postTitle}>{item.title}</Text>
                 </View>
             </View>
             <View style={styles.videoContainer}>
-                <Image source={{ uri: item.videoThumbnail }} style={styles.videoThumbnail} />
+                { index % 2 == 0 ?
+                    <Image source={require('../../assets/images/2.png')} style={styles.videoThumbnail} />
+                    :
+                    <Image source={require('../../assets/images/3.png')} style={styles.videoThumbnail} />
+                }
                 <Text style={styles.playButton}>▶</Text>
             </View>
             <View style={styles.postFooter}>
@@ -224,8 +232,8 @@ const styles = StyleSheet.create({
     },
     playButton: {
         position: 'absolute',
-        top: '50%',
-        left: '50%',
+        top: '35%',
+        left: '43%',
         transform: [{ translateX: -10 }, { translateY: -10 }],
         fontSize: 30,
         color: 'white',
