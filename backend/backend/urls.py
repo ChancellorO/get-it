@@ -24,5 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('register/', views.RegisterAPI.as_view(), name='register'),
     path('login/', views.LoginAPI.as_view(), name='login'),
+    path('grabReels/', views.GrabReelsAPI.as_view(), name='GrabReels'),
+    path('submitChanges/', views.submitChangesAPI.as_view(), name="submitChanges")
 
 ]
