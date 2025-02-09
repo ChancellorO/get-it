@@ -1,0 +1,27 @@
+{
+  "name": "get-it-main",
+  "version": "1.0.0",
+  "description": "Frontend and backend need to be in separate terminal windows!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChancellorO/get-it.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ChancellorO/get-it/issues"
+  },
+  "homepage": "https://github.com/ChancellorO/get-it#readme",
+  "dependencies": {
+    "react-native-deck-swiper": "^2.0.17",
+    "react-native-dotenv": "^3.4.11",
+    "react-native-gesture-handler": "~2.20.2",
+    "react-native-reanimated": "~3.16.1",
+    "react-native-swipeable": "^0.6.0"
+  }
+}
