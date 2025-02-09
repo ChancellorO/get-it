@@ -5,6 +5,7 @@ const initialState = {
     email: "",
     fname: "",
     lname: "",
+    tags: []
 };
 
 export const authSlice = createSlice({
@@ -16,12 +17,14 @@ export const authSlice = createSlice({
         state.email = action.payload.email;
         state.fname = action.payload.fname;
         state.lname = action.payload.lname;
+        state.tags = action.payload.tags;
     },
     logout: state => {
         state.username = "";
         state.email = "";
         state.fname = "";
         state.lname = "";
+        state.tags = [];
     },
   },
 });

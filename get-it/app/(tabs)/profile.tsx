@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '@/features/authentication/authSlice';
 import { selectAuth } from '@/features/authentication/authSlice';
+import { router } from 'expo-router';
 
 export default function Profile() {
+    const dispatch = useDispatch();
     const { username, email, fname, lname } = useSelector(selectAuth);
     const [isEditing, setIsEditing] = useState(false);
     const [user, setUser] = useState({
@@ -13,6 +16,11 @@ export default function Profile() {
         fname: fname,
         lname: lname,
     });
+
+    const handleLogout = () => {
+        dispatch(logout());
+        router.replace('/(onboarding)/login');
+    }
 
     const submitChanges = async () => {
         try {
@@ -59,6 +67,13 @@ export default function Profile() {
                 activeOpacity={0.8} // Adds smooth click effect
             >
                 <Text style={styles.buttonText}>{isEditing ? 'Save' : 'Edit'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={styles.button} 
+                onPress={handleLogout}
+                activeOpacity={0.8} // Adds smooth click effect
+            >
+                <Text style={styles.buttonText}>Logout</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
