@@ -11,7 +11,7 @@ export default function Default() {
     { username ? 
       <Redirect href="/(tabs)" />
       :
-      <Redirect href="/(onboarding)/login" />
+      <Redirect href="/(tabs)" />
     }
     </>    
   );
