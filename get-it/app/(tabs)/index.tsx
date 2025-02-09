@@ -20,48 +20,17 @@ export default function Home() {
         }
     };
 
-    const dummyPosts = [
-        { 
-            id: '1', 
-            name: 'John Smith', 
-            category: 'Stocks', 
-            title: '5 Minute Stocks Terminologies', 
-            likes: 10, 
-            comments: 40, 
-            image: 'https://via.placeholder.com/50',
-            videoThumbnail: 'https://via.placeholder.com/300x150/808080/FFFFFF?text=Stocks+101'
-        },
-        { 
-            id: '2', 
-            name: 'Alice Johnson', 
-            category: 'Economics', 
-            title: 'Understanding Market Cycles', 
-            likes: 25, 
-            comments: 15, 
-            image: 'https://via.placeholder.com/50',
-            videoThumbnail: 'https://via.placeholder.com/300x150/808080/FFFFFF?text=Economics+Basics'
-        },
-        { 
-            id: '3', 
-            name: 'Michael Doe', 
-            category: 'Real Estate', 
-            title: 'How to Get the Best Mortgage Rates', 
-            likes: 18, 
-            comments: 22, 
-            image: 'https://via.placeholder.com/50',
-            videoThumbnail: 'https://via.placeholder.com/300x150/808080/FFFFFF?text=Mortgage+Tips'
-        },
-        { 
-            id: '4', 
-            name: 'Sophia Brown', 
-            category: 'Finance', 
-            title: 'Investment Strategies for Beginners', 
-            likes: 33, 
-            comments: 19, 
-            image: 'https://via.placeholder.com/50',
-            videoThumbnail: 'https://via.placeholder.com/300x150/808080/FFFFFF?text=Investment+Guide'
-        },
-    ];
+    // Dummy data for a larger dataset to test RecyclerView behavior
+    const dummyPosts = Array.from({ length: 20 }, (_, index) => ({
+        id: index.toString(),
+        name: ['John Smith', 'Alice Johnson', 'Michael Doe', 'Sophia Brown'][index % 4],
+        category: ['Stocks', 'Economics', 'Real Estate', 'Finance'][index % 4],
+        title: ['5 Minute Stocks Terminologies', 'Understanding Market Cycles', 'How to Get the Best Mortgage Rates', 'Investment Strategies for Beginners'][index % 4],
+        likes: Math.floor(Math.random() * 100),
+        comments: Math.floor(Math.random() * 50),
+        image: 'https://via.placeholder.com/50',
+        videoThumbnail: `https://via.placeholder.com/300x150/808080/FFFFFF?text=Video+${index + 1}`
+    }));
 
     const renderPost = ({ item }) => (
         <View style={styles.postCard}>
@@ -85,6 +54,11 @@ export default function Home() {
 
     return (
         <SafeAreaView style={styles.container}>
+            {/* "Get It." Header */}
+            <View style={styles.headerContainer}>
+                <Text style={styles.headerText}>Get It.</Text>
+            </View>
+
             {/* New Discussion Section */}
             <View style={styles.card}>
                 <TouchableOpacity style={styles.option}>
@@ -104,15 +78,22 @@ export default function Home() {
             </View>
 
             {/* Recommendations Section */}
-            <Text style={styles.recommendationsHeader}>Recommendations</Text>
-            <Text style={styles.subHeader}>Based on your choices and recent views</Text>
+            <View style={styles.recommendationCard}>
+                <Text style={styles.recommendationsHeader}>Recommendations</Text>
+                <Text style={styles.subHeader}>Based on your choices and recent views</Text>
 
-            <FlatList
-                data={dummyPosts}
-                keyExtractor={item => item.id}
-                renderItem={renderPost}
-                contentContainerStyle={styles.listContainer}
-            />
+                {/* Optimized FlatList for RecyclerView-like behavior */}
+                <FlatList
+                    data={dummyPosts}
+                    keyExtractor={item => item.id}
+                    renderItem={renderPost}
+                    contentContainerStyle={styles.listContainer}
+                    initialNumToRender={5} // Load first 5 items
+                    maxToRenderPerBatch={5} // Load items in batches of 5
+                    windowSize={10} // Keep only 10 items in memory
+                    removeClippedSubviews={true} // Unmounts off-screen items
+                />
+            </View>
 
             <Button size="giant" style={styles.getMoreButton} status="basic">
                 Get More Recommendations
@@ -125,7 +106,16 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#D3D3D3',
+        backgroundColor: 'white', // White background for the whole screen
+    },
+    headerContainer: {
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    headerText: {
+        fontSize: 26,
+        fontWeight: 'bold',
+        color: '#0A84FF',
     },
     card: {
         backgroundColor: 'white',
@@ -133,9 +123,22 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         width: '100%',
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
-        shadowRadius: 3,
+        shadowRadius: 6,
+        marginBottom: 15,
+        elevation: 3, // Extra shadow for Android
+    },
+    recommendationCard: {
+        backgroundColor: 'white',
+        padding: 15,
+        borderRadius: 15,
+        width: '100%',
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
+        elevation: 3,
         marginBottom: 15,
     },
     option: {
@@ -174,6 +177,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 3,
+        elevation: 2,
     },
     postHeader: {
         flexDirection: 'row',
@@ -208,6 +212,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         overflow: 'hidden',
         marginBottom: 10,
+        backgroundColor: '#E0E0E0',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 150,
     },
     videoThumbnail: {
         width: '100%',
@@ -229,6 +237,11 @@ const styles = StyleSheet.create({
     postFooter: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    getMoreButton: {
+        width: '100%',
+        backgroundColor: 'lightgray',
+        marginTop: 10,
     },
 });
-

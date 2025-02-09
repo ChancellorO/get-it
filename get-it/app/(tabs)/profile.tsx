@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { selectAuth } from '@/features/authentication/authSlice';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Profile() {
     const { username, email, fname, lname } = useSelector(selectAuth);
@@ -16,19 +16,18 @@ export default function Profile() {
 
     const submitChanges = async () => {
         try {
-            const res = await axios.post('http://127.0.0.1:8000/submitChanges/', user);
-            console.log(res.data);
-        }
-        catch (e) {
+            console.log("Submitting Changes:", user);
+            // Simulate API call
+            alert("Profile Updated!");
+        } catch (e) {
             console.error(e);
         }
-    }
+    };
 
     const handleEdit = () => {
         if (isEditing) {
             submitChanges();
         }
-
         setIsEditing(!isEditing);
     };
 
@@ -38,45 +37,48 @@ export default function Profile() {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* Profile Header */}
+            {/* "Get It." Header */}
             <View style={styles.headerContainer}>
-                <Text style={styles.title}>Get It.</Text>
-                <Text style={styles.subtitle}>Profile</Text>
+                <Text style={styles.headerText}>Get It.</Text>
             </View>
 
-            {/* User Details Card */}
-            <View style={styles.card}>
-                <ProfileField label="User Name" value={user.username} onChange={(val) => handleInputChange("username", val)} isEditing={isEditing} />
+            {/* Profile Details Card */}
+            <View style={styles.profileCard}>
+                <Text style={styles.profileTitle}>Profile</Text>
+                <ProfileField label="Username" value={user.username} onChange={(val) => handleInputChange("username", val)} isEditing={isEditing} />
                 <ProfileField label="Email" value={user.email} onChange={(val) => handleInputChange("email", val)} isEditing={isEditing} />
                 <ProfileField label="First Name" value={user.fname} onChange={(val) => handleInputChange("fname", val)} isEditing={isEditing} />
                 <ProfileField label="Last Name" value={user.lname} onChange={(val) => handleInputChange("lname", val)} isEditing={isEditing} />
+
+                {/* Edit Button */}
+                <TouchableOpacity style={styles.button} onPress={handleEdit} activeOpacity={0.8}>
+                    <Text style={styles.buttonText}>{isEditing ? 'Save' : 'Edit Profile'}</Text>
+                </TouchableOpacity>
             </View>
 
-            {/* Edit Button */}
-            <TouchableOpacity 
-                style={styles.button} 
-                onPress={handleEdit}
-                activeOpacity={0.8} // Adds smooth click effect
-            >
-                <Text style={styles.buttonText}>{isEditing ? 'Save' : 'Edit'}</Text>
-            </TouchableOpacity>
+            
         </SafeAreaView>
     );
 }
 
-// Profile Field Component (Switches between Text and TextInput)
+// Profile Field Component (Editable Text Input)
 const ProfileField = ({ label, value, onChange, isEditing }) => (
-    <View style={styles.infoContainer}>
+    <View style={styles.fieldContainer}>
         <Text style={styles.label}>{label}</Text>
         {isEditing ? (
-            <TextInput 
-                style={styles.input} 
-                value={value} 
-                onChangeText={onChange} 
-            />
+            <TextInput style={styles.input} value={value} onChangeText={onChange} />
         ) : (
             <Text style={styles.infoText}>{value}</Text>
         )}
+    </View>
+);
+
+// Bottom Navigation Component
+const BottomNav = ({ active }) => (
+    <View style={styles.bottomNav}>
+        <TouchableOpacity><Ionicons name="home-outline" size={24} color={active === "home" ? "black" : "gray"} /></TouchableOpacity>
+        <TouchableOpacity><Ionicons name="chatbubble-outline" size={24} color="gray" /></TouchableOpacity>
+        <TouchableOpacity><Ionicons name="person" size={24} color={active === "profile" ? "black" : "gray"} /></TouchableOpacity>
     </View>
 );
 
@@ -84,37 +86,36 @@ const ProfileField = ({ label, value, onChange, isEditing }) => (
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
         backgroundColor: 'white',
-        alignItems: 'center',
+        padding: 20,
     },
     headerContainer: {
         alignItems: 'center',
         marginBottom: 20,
     },
-    title: {
+    headerText: {
         fontSize: 26,
         fontWeight: 'bold',
         color: '#0A84FF',
     },
-    subtitle: {
-        fontSize: 20,
-        color: 'black',
-        fontWeight: '600',
-        marginTop: 5,
-    },
-    card: {
-        backgroundColor: '#F8F8F8',
+    profileCard: {
+        backgroundColor: 'white',
         padding: 20,
-        width: '90%',
-        borderRadius: 12,
-        elevation: 3, // Adds shadow on Android
-        shadowColor: '#000', // Shadow for iOS
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
+        borderRadius: 15,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 6,
+        elevation: 3,
+        marginBottom: 20,
     },
-    infoContainer: {
+    profileTitle: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        color: 'black',
+        marginBottom: 15,
+    },
+    fieldContainer: {
         marginBottom: 15,
         borderBottomWidth: 1,
         borderBottomColor: '#E0E0E0',
@@ -134,26 +135,31 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: 'black',
-        backgroundColor: '#fff',
+        backgroundColor: '#F5F5F5',
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: '#E0E0E0',
         padding: 8,
         borderRadius: 5,
     },
     button: {
-        marginTop: 20,
+        marginTop: 10,
         backgroundColor: '#0A84FF',
-        paddingVertical: 15,
-        paddingHorizontal: 40,
+        paddingVertical: 12,
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '90%',
-        elevation: 2, // Slight shadow on Android
     },
     buttonText: {
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold',
     },
+    bottomNav: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 16,
+        borderTopWidth: 1,
+        borderTopColor: '#ddd',
+    },
 });
+

@@ -5,35 +5,32 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const DiscussionScreen = () => {
     const [message, setMessage] = useState('');
-    
+
     return (
         <SafeAreaView style={styles.container}>
-            {/* Header */}
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Discussion</Text>
-                <TouchableOpacity style={styles.menuIcon}>
-                    <Ionicons name="ellipsis-vertical" size={24} color="black" />
-                </TouchableOpacity>
+            {/* "Get It." Header */}
+            <View style={styles.headerContainer}>
+                <Text style={styles.headerText}>Get It.</Text>
             </View>
-            
+
             {/* Chat Section */}
             <View style={styles.chatContainer}>
                 <View style={styles.chatIcon}>
-                    <Ionicons name="pause" size={40} color="gray" />
+                    <Ionicons name="chatbubble-ellipses-outline" size={40} color="gray" />
                 </View>
                 <Text style={styles.chatTitle}>Let's Chat!</Text>
-                <Text style={styles.chatSubtitle}>Based on your reels..blah blah</Text>
+                <Text style={styles.chatSubtitle}>Based on your reels and discussions.</Text>
                 <TouchableOpacity style={styles.button}>
                     <Text style={styles.buttonText}>Get Prompted by Bot</Text>
                 </TouchableOpacity>
             </View>
-            
+
             {/* Message Input */}
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.keyboardAvoidingView}>
                 <View style={styles.messageInputContainer}>
                     <TextInput 
                         style={styles.input} 
-                        placeholder="Send message" 
+                        placeholder="Send message..." 
                         value={message} 
                         onChangeText={setMessage}
                         editable={true}
@@ -43,18 +40,21 @@ const DiscussionScreen = () => {
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
-            
+
             {/* Bottom Navigation */}
-            <View style={styles.bottomNav}>
-                <TouchableOpacity><Ionicons name="home-outline" size={24} color="gray" /></TouchableOpacity>
-                <TouchableOpacity><Ionicons name="search-outline" size={24} color="gray" /></TouchableOpacity>
-                <TouchableOpacity><Ionicons name="videocam-outline" size={24} color="gray" /></TouchableOpacity>
-                <TouchableOpacity><Ionicons name="chatbubble-outline" size={24} color="black" /></TouchableOpacity>
-                <TouchableOpacity><Ionicons name="person-outline" size={24} color="gray" /></TouchableOpacity>
-            </View>
+            <BottomNav active="discussion" />
         </SafeAreaView>
     );
 };
+
+// Bottom Navigation Component
+const BottomNav = ({ active }) => (
+    <View style={styles.bottomNav}>
+        <TouchableOpacity><Ionicons name="home-outline" size={24} color={active === "home" ? "black" : "gray"} /></TouchableOpacity>
+        <TouchableOpacity><Ionicons name="chatbubble" size={24} color={active === "discussion" ? "black" : "gray"} /></TouchableOpacity>
+        <TouchableOpacity><Ionicons name="person-outline" size={24} color="gray" /></TouchableOpacity>
+    </View>
+);
 
 const styles = StyleSheet.create({
     container: {
@@ -62,27 +62,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         justifyContent: 'space-between',
     },
-    header: {
-        flexDirection: 'row',
+    headerContainer: {
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: Platform.OS === 'ios' ? 50 : 20, // Adjust for iPhones
-        paddingBottom: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
-        position: 'relative',
+        marginBottom: 20,
+        marginTop: Platform.OS === 'ios' ? 50 : 20, // Adjust for iPhones
     },
     headerText: {
-        fontSize: 18,
+        fontSize: 26,
         fontWeight: 'bold',
-        textAlign: 'center',
-        position: 'absolute',
-        left: 0,
-        right: 0,
-    },
-    menuIcon: {
-        position: 'absolute',
-        right: 16, // Ensures the menu button stays on the right
+        color: '#0A84FF',
     },
     chatContainer: {
         alignItems: 'center',
