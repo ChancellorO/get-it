@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 
-export default function Profile() {
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+
+export default function Search() {
     const [isEditing, setIsEditing] = useState(false);
-    const [user, setUser] = useState({
+
+    // Example user details (In real apps, fetch from API or database)
+    const user = {
         username: "chance123",
         email: "chance@email.com",
         fname: "Chance",
         lname: "Chance",
-    });
+    };
 
     const handleEdit = () => {
         setIsEditing(!isEditing);
-    };
-
-    const handleInputChange = (field, value) => {
-        setUser({ ...user, [field]: value });
     };
 
     return (
@@ -28,10 +27,10 @@ export default function Profile() {
 
             {/* User Details Card */}
             <View style={styles.card}>
-                <ProfileField label="User Name" value={user.username} onChange={(val) => handleInputChange("username", val)} isEditing={isEditing} />
-                <ProfileField label="Email" value={user.email} onChange={(val) => handleInputChange("email", val)} isEditing={isEditing} />
-                <ProfileField label="First Name" value={user.fname} onChange={(val) => handleInputChange("fname", val)} isEditing={isEditing} />
-                <ProfileField label="Last Name" value={user.lname} onChange={(val) => handleInputChange("lname", val)} isEditing={isEditing} />
+                <ProfileField label="User Name" value={user.username} />
+                <ProfileField label="Email" value={user.email} />
+                <ProfileField label="First Name" value={user.fname} />
+                <ProfileField label="Last Name" value={user.lname} />
             </View>
 
             {/* Edit Button */}
@@ -46,19 +45,11 @@ export default function Profile() {
     );
 }
 
-// Profile Field Component (Switches between Text and TextInput)
-const ProfileField = ({ label, value, onChange, isEditing }) => (
+// Profile Field Component (Reusable)
+const ProfileField = ({ label, value }) => (
     <View style={styles.infoContainer}>
         <Text style={styles.label}>{label}</Text>
-        {isEditing ? (
-            <TextInput 
-                style={styles.input} 
-                value={value} 
-                onChangeText={onChange} 
-            />
-        ) : (
-            <Text style={styles.infoText}>{value}</Text>
-        )}
+        <Text style={styles.infoText}>{value}</Text>
     </View>
 );
 
@@ -111,16 +102,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: 'black',
-    },
-    input: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: 'black',
-        backgroundColor: '#fff',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 8,
-        borderRadius: 5,
     },
     button: {
         marginTop: 20,
